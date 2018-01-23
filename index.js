@@ -139,6 +139,19 @@ function Create(options) {
                     })
                     else throw "BotBuilder-Line > If you have more than 4 buttons, use a carousel of hero cards instead (Up to 10 cards with 3 buttons each)."
                     break;
+                  case "vnd.microsoft.card.hero":
+                    if (a.content.buttons.length < 5) body.push({
+                      type: "template",
+                      altText: getAltText(msg.content.text || msg.content.title + " " + msg.content.subtitle || "Please select an action."),
+                      template: {
+                        type: "buttons",
+                        title: msg.content.title || null,
+                        text: msg.content.text || "Please select an action.",
+                        actions: a.content.buttons.map(b => getButtonTemp(b))
+                      }
+                    })
+                    else throw "BotBuilder-Line > If you have more than 4 buttons, use a carousel of hero cards instead (Up to 10 cards with 3 buttons each)."
+                    break;
                 }
                 break;
             }
