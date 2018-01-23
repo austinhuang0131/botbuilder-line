@@ -98,9 +98,6 @@ function Create(options) {
             }
           }]
         }
-        else if (msg.attachmentLayout === "list") {
-          throw "BotBuilder-Line > We only support carousel layout.";
-        }
         else if (msg.attachments) {
           return msg.attachments.map(a => {
             switch (a.contentType.split("/")[0]) {
