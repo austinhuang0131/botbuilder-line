@@ -166,7 +166,7 @@ function Create(options) {
     return this;
   };
   this.listen = function(req, res) {
-    const signature = createHmac("SHA256", optionschannelSecret)
+    const signature = crypto.createHmac("SHA256", optionschannelSecret)
       .update(req.body)
       .digest("base64");
     if (options.debug) console.log("BotBuilder-Line > Messages received", req.body);
