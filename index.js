@@ -178,7 +178,7 @@ function Create(options) {
       return console.error(
         "BotBuilder-Line > Request trashed due to signature mismatch. Body: ", req.body
       );
-    } else if (req.body.type === "message") {
+    } else {
       return req.body.events.map(this.processMessage).then(
         result => res.json(result)
       );
