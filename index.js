@@ -162,7 +162,8 @@ function Create(options) {
               bot: { name: "placeholder", id: "placeholder" },
               user: { name: message.replyToken, id: message.source.userId },
               channelId: "directline"
-          }
+          },
+          conversation: {id: message.source.userId}
       };
       if (message.message.type === "text") msg.text === message.message.text;
       this.handler([msg]);
