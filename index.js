@@ -158,7 +158,7 @@ function Create(options) {
           source: "line",
           replyToken: message.replyToken,
           address: {
-              conversation: { id: message.souce.userId },
+              conversation: { id: message.source.userId },
               bot: { id: "placeholder", name: "placeholder" },
               user: { id: message.replyToken, name: message.source.userId },
               channelId: "directline"
