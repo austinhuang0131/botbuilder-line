@@ -75,7 +75,7 @@ function Create(options) {
         "BotBuilder-Line > Sending messages... " + JSON.stringify(messages)
       );
     line.replyMessage(
-      messages[0].user.id,
+      messages[0].address.user.id,
       messages.map(msg => {
         if (msg.attachments && msg.attachments.filter((value, index, self) => {return self.indexOf(value) === index;}).length > 1) throw "BotBuilder-Line > All attachments in one message must have the same ContentType."
         else if (msg.attachments && msg.attachments.length > 1 && msg.attachments.length < 11 && msg.attachmentLayout === "carousel" && msg.attachments[0].contentType === "application/vnd.microsoft.card.hero") {
