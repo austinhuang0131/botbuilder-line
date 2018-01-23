@@ -5,7 +5,7 @@ const builder = require("botbuilder"),
   crypto = require("crypto"), // DO NOT require this in package.json
   bodyParser = require("body-parser"),
   mm = require("musicmetadata"),
-  channelId = "line";
+  channelId = "directline";
 var getDuration = (url) => {
   var client = http;
   if (a.contentUrl.startsWith("https")) client = https;
@@ -153,19 +153,19 @@ function Create(options) {
   this.processMessage = function(message) {
     if (options.debug) console.log("BotBuilder-Line > processMessage", msg);
     if (message.type === "message") {
-      var msg = new builder.Message()
-        .address({
-          channelId: options.channelId,
-          channelName: "line",
-          msg: message,
-          user: { id: message.replyToken, name: message.source.userId },
-          bot: { id: "placeholder", name: "placeholder" },
-          conversation: { id: message.source.userId }
-        })
-        .timestamp(message.timestamp)
-        .entities();
-      if (message.message.type === "text") msg = msg.text(message.message.text)
-      this.handler([msg.toMessage()]);
+      var msg = {
+          timestamp: message.timestamp,
+          source: "line",
+          replyToken: message.replyToken,
+          address: {
+              conversation: { id: message.source.userId },
+              bot: { id: "placeholder", name: "placeholder" },
+              user: { id: message.replyToken, name: message.source.userId },
+              channelId: "directline"
+          }
+      };
+      if (message.message.type === "text") msg.text === message.message.text;
+      this.handler([msg]);
     }
     return this;
   };
