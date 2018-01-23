@@ -64,7 +64,7 @@ function Create(options) {
     throw 'BotBuilder-Line > Options undefined! Define them as the following: {channelAccessToken: "token", channelSecret: "secret"}';
   var line = new Line.Client(options);
   this.onEvent = (handler) => this.handler = handler;
-  this.startConversation = () => if (options.debug) console.log("BotBuilder-Line > startConversation", arguments);
+  this.startConversation = () => {if (options.debug) console.log("BotBuilder-Line > startConversation", arguments)};
   this.send = function(messages, cb) {
     if (messages.length > 5)
       Promise.reject(
