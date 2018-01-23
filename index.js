@@ -156,6 +156,7 @@ function Create(options) {
       var msg = new builder.Message()
         .address({
           channelId: options.channelId,
+          source: "line",
           channelName: "line",
           msg: message,
           user: { id: message.replyToken, name: message.source.userId },
