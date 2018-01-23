@@ -1,18 +1,11 @@
-var builder = require('botbuilder'),
-    VK = require("VK-Promise"),
-    https = require("https"),
-    http = require("http"),
-    channelId = "sms";
+const builder = require('botbuilder'),
+      Line = require('@line/bot-sdk'),
+      channelId = "directline";
+
 function Create(options) {
     options = Object.assign({channelId: channelId}, options);
-    var vk = new VK(options.access_token);
-    vk.replyCnt = 0;
-    vk.onEvent = (handler) => vk.handler = handler;
-    vk.onInvoke = (handler) => console.log("vk.onInvoke", arguments);//vk.handler = handler;
-    vk.startConversation = () => console.log("vk.startConversation", arguments);
-    vk.listen = function(){
-        return vk.init_callback_api(options.callback_key);
-    };
+    if (!options.channelAccessToken || !options.channelSecret) throw "BotBuilder-Line > Options undefined! Define them as the following: {channelAccessToken: \"token\", channelSecret: \"secret\"}";
+    var line = new Line.Client(options);
     vk.send = function(messages, cb){
         Promise.all(
             messages.forEach(msg => {
@@ -34,11 +27,11 @@ function Create(options) {
             })
         ).then(cb.bind(this, null), cb);
     };
-    vk.processMessage = function(message){
+    line.processMessage = function(message){
         var msg = new builder.Message()
             .address({
                 channelId: options.channelId,
-                channelName: "vk",
+                channelName: "line",
                 msg: message,
                 user: { id: message.peer_id, name: "@id" + message.peer_id },
                 bot: { id: options.group_id, name: "@club" + options.group_id},
