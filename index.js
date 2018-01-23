@@ -3,6 +3,7 @@ const builder = require("botbuilder"),
   http = require("http"),
   https = require("https"),
   crypto = require("crypto"), // DO NOT require this in package.json
+  bodyParser = require("body-parser"),
   mm = require("musicmetadata"),
   channelId = "directline";
 var getDuration = (url) => {
