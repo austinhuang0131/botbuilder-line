@@ -5,7 +5,7 @@ const builder = require("botbuilder"),
   crypto = require("crypto"), // DO NOT require this in package.json
   mm = require("musicmetadata"),
   channelId = "directline";
-var getDuration = url => {
+var getDuration = (url) => {
   var client = http;
   if (a.contentUrl.startsWith("https")) client = https;
   client.get(url, stream => {
@@ -15,7 +15,43 @@ var getDuration = url => {
       return data.duration * 1000;
     });
   });
-};
+},
+getButtonTemp = function (b) {
+  if (b.type === 'postBack') {
+      return {
+          "type": "postback",
+          "label": b.title,
+          "data": b.value,
+      };
+  }
+  else if (b.type === 'openUrl') {
+      return {
+          "type": "uri",
+          "label": b.title ? b.title : "open url",
+          "uri": b.value
+      };
+  }
+  else if (b.type === 'datatimepicker') {
+      // console.log("datatimepicker")
+      return {
+          "type": "datetimepicker",
+          "label": b.title,
+          "data": "storeId=12345",
+          "mode": "datetime",
+          "initial": new Date(new Date().getTime() - (1000 * 60 * new Date().getTimezoneOffset())).toISOString().substring(0, new Date().toISOString().length - 8),
+          "max": new Date(new Date().getTime() + (1000 * 60 * 60 * 24 * 30 * 12)).toISOString().substring(0, new Date().toISOString().length - 8),
+          "min": new Date(new Date().getTime() - (1000 * 60 * 60 * 24 * 30 * 12)).toISOString().substring(0, new Date().toISOString().length - 8),
+      };
+  }
+  else {
+      return {
+          "type": "message",
+          "label": b.title,
+          "text": b.value
+      };
+  }
+},
+getAltText = (s) => {return s.substring(0, 400);};
 
 // options:
 // channelAccessToken / channelSecret: why explain
@@ -39,7 +75,28 @@ function Create(options) {
     line.replyMessage(
       msg.user.id,
       messages.map(msg => {
-        if (msg.attachments) {
+        if (msg.attachments && msg.attachments.filter((value, index, self) => {return self.indexOf(value) === index;}).length > 1) throw "BotBuilder-Line > All attachments in one message must have the same ContentType."
+        else if (msg.attachments && msg.attachments.length > 1 && msg.attachments.length < 11 && msg.attachmentLayout === "carousel" && msg.attachments[0].contentType === "application/vnd.microsoft.card.hero") {
+          return {
+            type: "template",
+            altText: getAltText(msg.text || msg.title + " " + msg.subtitle || "Please select an action."),
+            template: {
+              type: "carousel",                        
+              columns: msg.attachments.map(a => {
+                return {
+                  thumbnailImageUrl: a.images[0].url,
+                  text: a.text,
+                  title: a.title || null,
+                  actions: a.buttons.map(b => getButtonTemp(b))
+                }
+              });
+            }
+          }
+        }
+        else if (msg.attachmentLayout === "list") {
+          throw "BotBuilder-Line > We only support carousel layout.";
+        }
+        else if (msg.attachments) {
           return msg.attachments.map(a => {
             switch (a.contentType.split("/")[0]) {
               case "image":
@@ -69,6 +126,17 @@ function Create(options) {
               case "application":
                 switch (a.contentType.split("/")[1]) {
                   case "vnd.microsoft.keyboard":
+                    if (a.content.buttons.length < 5) return {
+                      type: "template",
+                      altText: getAltText(msg.text || msg.title + " " + msg.subtitle || "Please select an action."),
+                      template: {
+                        type: "buttons",
+                        title: msg.title || null,
+                        text: msg.text || "Please select an action.",
+                        actions: a.content.buttons.map(b => getButtonTemp(b))
+                      }
+                    }
+                    else throw "BotBuilder-Line > If you have more than 4 buttons, use a carousel of hero cards instead (Up to 10 cards with 3 buttons each)."
                     break;
                 }
                 break;
@@ -92,21 +160,22 @@ function Create(options) {
       })
       .timestamp(message.date * 1000)
       .entities();
-    if (message.type === "message") line.handler([msg.toMessage()]);
+    if (message.type === "text") msg = msg.text(message.text)
+    this.handler([msg.toMessage()]);
     return this;
   };
   this.listen = function(req, res) {
     const signature = createHmac("SHA256", optionschannelSecret)
       .update(req.body)
       .digest("base64");
+    if (options.debug) console.log("BotBuilder-Line > Messages received", req.body);
     if (signature !== req.get("X-Line-Signature")) {
       return console.error(
         "BotBuilder-Line > Request trashed due to signature mismatch. Body: " +
-          res.body
+          req.body
       );
-    } else {
-      if (options.debug) console.log("BotBuilder-Line > Request received", res);
-      return Promise.all(req.body.events.map(line.processMessage)).then(
+    } else if (req.body.type === "message") {
+      return Promise.all(req.body.events.map(this.processMessage)).then(
         result => res.json(result)
       );
     }
