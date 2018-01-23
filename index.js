@@ -1,6 +1,11 @@
 const builder = require('botbuilder'),
       Line = require('@line/bot-sdk'),
+      crypto = require('crypto'), // DO NOT require this in package.json
       channelId = "directline";
+
+// options:
+// channelAccessToken / channelSecret: why explain
+// debug: bool, show a bunch of useless console logs
 
 function Create(options) {
     options = Object.assign({channelId: channelId}, options);
@@ -33,21 +38,27 @@ function Create(options) {
                 channelId: options.channelId,
                 channelName: "line",
                 msg: message,
-                user: { id: message.peer_id, name: "@id" + message.peer_id },
-                bot: { id: options.group_id, name: "@club" + options.group_id},
-                conversation: { id: "vk" + options.group_id }
+                user: { id: message.replyToken, name: message.source.userId },
+                bot: { id: "placeholder", name: "placeholder" },
+                conversation: { id: message.source.userId }
             })
             .timestamp(message.date * 1000)
-            .entities()
-            .text(message.body);
-        vk.handler([msg.toMessage()]);
-        return vk;
+            .entities();
+        if (message.type === "message")
+        line.handler([msg.toMessage()]);
+        return line;
     };
-    vk.on("message",function (e, msg) {
-        e.ok();
-        vk.processMessage(msg);
+    line.listen = function(req, res) {
+        const signature = createHmac('SHA256', optionschannelSecret).update(req.body).digest('base64');
+        if (signature !== req.get("X-Line-Signature")) {
+              return console.error("BotBuilder-Line > Request trashed due to signature mismatch! Body: "+res.body);
+        }
+        else {
+              if (debug) console.log("BotBuilder-Line > Request received", res);
+              return Promise.all(req.body.events.map(line.processMessage)).then((result) => res.json(result));
+        }
     });
-    Object.assign(vk, options);
-    return vk;
+    Object.assign(line, options);
+    return line;
 }
 module.exports = Create;
