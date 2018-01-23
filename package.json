@@ -4,14 +4,16 @@
   "description": "BotFramework to Line connector",
   "keywords": ["botbuilder"],
   "bugs": {
-  }
-  "scripts": {
-    "main": "index.js"
+    "url": "https://github.com/austinhuang0131/botbuilder-line/issues",
+    "email": "im@austinhuang.me"
   },
+  "license": "MIT",
+  "author": "Austin Huang <im@austinhuang.me> (https://austinhuang.me)",
+  "main": "index.js",
   "dependencies": {
     "@line/bot-sdk": "^5.2.0",
     "botbuilder": "^3.13.1",
-    "musicmetadata", "^2.0.5"
+    "musicmetadata": "^2.0.5"
   },
   "repository": {
     "type": "git",
