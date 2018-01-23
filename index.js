@@ -65,6 +65,7 @@ function Create(options) {
   var line = new Line.Client(options);
   this.onEvent = (handler) => this.handler = handler;
   this.startConversation = () => {if (options.debug) console.log("BotBuilder-Line > startConversation", arguments)};
+  this.onInvoke = () => {if (options.debug) console.log("BotBuilder-Line > onInvoke", arguments)};
   this.send = function(messages, cb) {
     if (messages.length > 5)
       Promise.reject(
