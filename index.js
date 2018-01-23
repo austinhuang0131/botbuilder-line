@@ -167,7 +167,6 @@ function Create(options) {
     return this;
   };
   this.listen = function(req, res) {
-    this._app.use(bodyParser.json({type: "*/*"}));
     const signature = crypto.createHmac("SHA256", options.channelSecret)
       .update(JSON.stringify(req.body))
       .digest("base64");
