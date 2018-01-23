@@ -184,7 +184,7 @@ function Create(options) {
       );
     } else {
       return Promise.all(req.body.events.map(this.processMessage)).then(
-        result => res.json(result)
+        result => res.json({})
       );
     }
   };
