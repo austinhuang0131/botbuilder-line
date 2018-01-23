@@ -151,6 +151,7 @@ function Create(options) {
     );
   };
   this.processMessage = function(message) {
+    if (options.debug) console.log("BotBuilder-Line > processMessage", msg);
     if (message.type === "message") {
       var msg = new builder.Message()
         .address({
@@ -164,7 +165,6 @@ function Create(options) {
         .timestamp(message.timestamp)
         .entities();
       if (message.message.type === "text") msg = msg.text(message.message.text)
-      if (options.debug) console.log("BotBuilder-Line > processMessage", msg);
       this.handler([msg.toMessage()]);
     }
     return this;
@@ -179,7 +179,7 @@ function Create(options) {
         "BotBuilder-Line > Request trashed due to signature mismatch. Body: ", req.body
       );
     } else if (req.body.type === "message") {
-      return Promise.all(req.body.events.map(this.processMessage)).then(
+      return req.body.events.map(this.processMessage).then(
         result => res.json(result)
       );
     }
