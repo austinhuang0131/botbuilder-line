@@ -151,19 +151,21 @@ function Create(options) {
     );
   };
   this.processMessage = function(message) {
-    var msg = new builder.Message()
-      .address({
-        channelId: options.channelId,
-        channelName: "line",
-        msg: message,
-        user: { id: message.replyToken, name: message.source.userId },
-        bot: { id: "placeholder", name: "placeholder" },
-        conversation: { id: message.source.userId }
-      })
-      .timestamp(message.date * 1000)
-      .entities();
-    if (message.type === "text") msg = msg.text(message.text)
-    this.handler([msg.toMessage()]);
+    if (message.type === "message") {
+      var msg = new builder.Message()
+        .address({
+          channelId: options.channelId,
+          channelName: "line",
+          msg: message,
+          user: { id: message.replyToken, name: message.source.userId },
+          bot: { id: "placeholder", name: "placeholder" },
+          conversation: { id: message.source.userId }
+        })
+        .timestamp(message.timestamp)
+        .entities();
+      if (message.message.type === "text") msg = msg.text(message.message.text)
+      this.handler([msg.toMessage()]);
+    }
     return this;
   };
   this.listen = function(req, res) {
