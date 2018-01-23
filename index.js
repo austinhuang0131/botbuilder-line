@@ -75,7 +75,7 @@ function Create(options) {
         "BotBuilder-Line > Sending messages... " + JSON.stringify(messages)
       );
     line.replyMessage(
-      msg.user.id,
+      messages[0].user.id,
       messages.map(msg => {
         if (msg.attachments && msg.attachments.filter((value, index, self) => {return self.indexOf(value) === index;}).length > 1) throw "BotBuilder-Line > All attachments in one message must have the same ContentType."
         else if (msg.attachments && msg.attachments.length > 1 && msg.attachments.length < 11 && msg.attachmentLayout === "carousel" && msg.attachments[0].contentType === "application/vnd.microsoft.card.hero") {
@@ -179,7 +179,7 @@ function Create(options) {
         "BotBuilder-Line > Request trashed due to signature mismatch. Body: ", req.body
       );
     } else {
-      return req.body.events.map(this.processMessage).then(
+      return Promise.all(req.body.events.map(this.processMessage)).then(
         result => res.json(result)
       );
     }
