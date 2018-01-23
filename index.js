@@ -142,11 +142,11 @@ function Create(options) {
                   case "vnd.microsoft.card.hero":
                     if (a.content.buttons.length < 5) body.push({
                       type: "template",
-                      altText: getAltText(msg.content.text || msg.content.title + " " + msg.content.subtitle || "Please select an action."),
+                      altText: getAltText(a.content.text || a.content.title + " " + a.content.subtitle || "Please select an action."),
                       template: {
                         type: "buttons",
-                        title: msg.content.title || null,
-                        text: msg.content.text || "Please select an action.",
+                        title: a.content.title || null,
+                        text: a.content.text || "Please select an action.",
                         actions: a.content.buttons.map(b => getButtonTemp(b))
                       }
                     })
