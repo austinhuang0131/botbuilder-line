@@ -168,7 +168,7 @@ function Create(options) {
               conversation: {id: "1"}
           },
       };
-      if (message.message.type === "text") msg.text === message.message.text;
+      if (message.message.type === "text") msg.text = message.message.text;
       this.handler([msg]);
       if (options.debug) console.log("BotBuilder-Line > Message processed", msg);
     }
