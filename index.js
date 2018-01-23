@@ -81,22 +81,22 @@ function Create(options) {
       messages.map(msg => {
         if (msg.attachments && msg.attachments.map(t => t.contentType).filter((value, index, self) => {return self.indexOf(value) === index;}).length > 1) throw "BotBuilder-Line > All attachments in one message must have the same ContentType."
         else if (msg.attachments && msg.attachments.length > 1 && msg.attachments.length < 11 && msg.attachmentLayout === "carousel" && msg.attachments[0].contentType === "application/vnd.microsoft.card.hero") {
-          return {
+          return [{
             type: "template",
             altText: getAltText(msg.text || msg.title + " " + msg.subtitle || "Please select an action."),
             template: {
               type: "carousel",                        
               columns: msg.attachments.map(a => {
                 var m = {
-                  text: a.text,
-                  title: a.title || null,
-                  actions: a.buttons.map(b => getButtonTemp(b))
+                  text: a.content.text,
+                  title: a.content.title || null,
+                  actions: a.content.buttons.map(b => getButtonTemp(b))
                 }
-                if (a.images) m.thumbnailImageUrl = m.images[0].url;
+                if (a.images) m.thumbnailImageUrl = m.content.images[0].url;
                 return m;
               })
             }
-          }
+          }]
         }
         else if (msg.attachmentLayout === "list") {
           throw "BotBuilder-Line > We only support carousel layout.";
@@ -148,9 +148,9 @@ function Create(options) {
             }
           });
         } else {
-          return { type: "text", text: msg.text };
+          return [{ type: "text", text: msg.text }];
         }
-      })
+      })[0]
     );
   };
   this.processMessage = function(message) {
