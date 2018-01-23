@@ -1,0 +1,20 @@
+{
+  "name": "botbuilder-line",
+  "version": "0.0.1",
+  "description": "BotFramework to Line connector",
+  "keywords": ["botbuilder"],
+  "bugs": {
+  }
+  "scripts": {
+    "main": "index.js"
+  },
+  "dependencies": {
+    "@line/bot-sdk": "^5.2.0",
+    "botbuilder": "^3.13.1",
+    "musicmetadata", "^2.0.5"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/austinhuang0131/botbuilder-line.git"
+  }
+}
