@@ -62,6 +62,7 @@ function Create(options) {
   if (!options.channelAccessToken || !options.channelSecret)
     throw 'BotBuilder-Line > Options undefined! Define them as the following: {channelAccessToken: "token", channelSecret: "secret"}';
   var line = new Line.Client(options);
+  this.onEvent = (handler) => this.handler = handler;
   this.send = function(messages, cb) {
     if (messages.length > 5)
       Promise.reject(
