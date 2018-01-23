@@ -89,7 +89,7 @@ function Create(options) {
                   title: a.title || null,
                   actions: a.buttons.map(b => getButtonTemp(b))
                 }
-              });
+              })
             }
           }
         }
