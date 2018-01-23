@@ -158,10 +158,9 @@ function Create(options) {
           source: "line",
           replyToken: message.replyToken,
           address: {
-              conversation: { id: message.source.userId },
               bot: { name: "placeholder", id: "placeholder" },
               user: { name: message.replyToken, id: message.source.userId },
-              channelId: "line"
+              channelId: "directline"
           }
       };
       if (message.message.type === "text") msg.text === message.message.text;
