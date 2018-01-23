@@ -87,13 +87,13 @@ function Create(options) {
             template: {
               type: "carousel",                        
               columns: msg.attachments.map(a => {
-                var b = {
+                var m = {
                   text: a.text,
                   title: a.title || null,
                   actions: a.buttons.map(b => getButtonTemp(b))
                 }
-                if (a.images) b.thumbnailImageUrl = a.images[0].url;
-                return b;
+                if (a.images) m.thumbnailImageUrl = m.images[0].url;
+                return m;
               })
             }
           }
