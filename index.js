@@ -79,7 +79,7 @@ function Create(options) {
     line.replyMessage(
       messages[0].address.user.name,
       messages.map(msg => {
-        if (msg.attachments && msg.attachments.filter((value, index, self) => {return self.indexOf(value) === index;}).length > 1) throw "BotBuilder-Line > All attachments in one message must have the same ContentType."
+        if (msg.attachments && msg.attachments.map(t => t.contentType).filter((value, index, self) => {return self.indexOf(value) === index;}).length > 1) throw "BotBuilder-Line > All attachments in one message must have the same ContentType."
         else if (msg.attachments && msg.attachments.length > 1 && msg.attachments.length < 11 && msg.attachmentLayout === "carousel" && msg.attachments[0].contentType === "application/vnd.microsoft.card.hero") {
           return {
             type: "template",
