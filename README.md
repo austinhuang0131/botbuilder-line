@@ -5,7 +5,7 @@ Bot Framework connector to Line, just better.
 ```js
 const express = require('express'),
       builder = require('botbuilder'),
-	    bodyParser = require('body-parser');
+      bodyParser = require('body-parser');
 var connector = new builder.ChatConnector({
     appId: process.env.appid,
     appPassword: process.env.appkey
@@ -35,7 +35,7 @@ Just the `message` event.
 
 ### Sending messages
 * Image, Video, Audio as attachments
-* Hero card
+* Hero card (List (max 4 buttons) and carousel (max 10 cards x 3 buttons))
 * Keyboard buttons
 
 ## Note
