@@ -1,8 +1,13 @@
 {
   "name": "botbuilder-line",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "description": "BotFramework to Line connector",
-  "keywords": ["botbuilder", "line", "sdk", "chatbot"],
+  "keywords": [
+    "botbuilder",
+    "line",
+    "sdk",
+    "chatbot"
+  ],
   "bugs": {
     "url": "https://github.com/austinhuang0131/botbuilder-line/issues",
     "email": "im@austinhuang.me"
