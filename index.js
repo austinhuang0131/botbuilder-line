@@ -178,7 +178,7 @@ function Create(options) {
               channelId: "directline",
               channelName: "line",
               msg: message,
-              conversation: {id: "1"}
+              conversation: {id: "1", isGroup: message.source.type === "group" ? true : false}
           },
       };
       if (message.message.type === "text") msg.text = message.message.text;
