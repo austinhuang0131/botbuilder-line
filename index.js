@@ -72,6 +72,11 @@ function Create(options) {
         "BotBuilder-Line > No more than 5 messages to 1 reply token! Messages: " +
           JSON.stringify(messages)
       );
+    else if (messages.filter(m => m.address.source === "line").length !== messages.length)
+      Promise.reject(
+        "BotBuilder-Line > Ignoring messages for other platforms..." +
+          JSON.stringify(messages)
+      );
     if (options.debug)
       console.log(
         "BotBuilder-Line > Sending messages... " + JSON.stringify(messages)
