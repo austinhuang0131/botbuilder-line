@@ -165,7 +165,7 @@ function Create(options) {
       body
     );
   };
-  this.processMessage = function(message) {
+  this.processLineMessage = function(message) {
     if (message.type === "message") {
       var msg = {
           timestamp: message.timestamp,
@@ -198,7 +198,7 @@ function Create(options) {
         "BotBuilder-Line > Request trashed due to signature mismatch. Body: ", req.body
       );
     } else {
-      return Promise.all(req.body.events.map(this.processMessage));
+      return Promise.all(req.body.events.map(this.processLineMessage));
     }
   };
   Object.assign(line, options);
