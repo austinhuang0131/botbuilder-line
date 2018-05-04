@@ -66,7 +66,7 @@ function LineConnector(options) {
   this.onEvent = (handler) => this.handler = handler;
   this.startConversation = () => {if (options.debug) console.log("BotBuilder-Line > startConversation", arguments)};
   this.onInvoke = () => {if (options.debug) console.log("BotBuilder-Line > onInvoke", arguments)};
-  this.prototype.send = function(messages, cb) {
+  this.send = function(messages, cb) {
     if (messages.length > 5)
       return Promise.reject(
         "BotBuilder-Line > No more than 5 messages to 1 reply token! Messages: " +
