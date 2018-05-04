@@ -188,6 +188,7 @@ function Create(options) {
     return this;
   };
   this.listen = function(req, res) {
+    res.send("ok");
     const signature = crypto.createHmac("SHA256", options.channelSecret)
       .update(JSON.stringify(req.body))
       .digest("base64");
@@ -197,9 +198,7 @@ function Create(options) {
         "BotBuilder-Line > Request trashed due to signature mismatch. Body: ", req.body
       );
     } else {
-      return Promise.all(req.body.events.map(this.processMessage)).then(
-        result => res.json({})
-      );
+      return Promise.all(req.body.events.map(this.processMessage));
     }
   };
   Object.assign(line, options);
