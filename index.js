@@ -5,7 +5,7 @@ const builder = require("botbuilder"),
   crypto = require("crypto"), // DO NOT require this in package.json
   bodyParser = require("body-parser"),
   mm = require("musicmetadata"),
-  channelId = "directline";
+  channelId = "line";
 var getDuration = (url) => {
   var client = http;
   if (a.contentUrl.startsWith("https")) client = https;
@@ -175,7 +175,7 @@ function Create(options) {
           address: {
               bot: { name: "placeholder", id: "placeholder" },
               user: { name: message.replyToken, id: message.source.userId },
-              channelId: "directline",
+              channelId: "line",
               channelName: "line",
               msg: message,
               conversation: {id: message.source.groupId ? message.source.groupId : "1", isGroup: message.source.type === "group" ? true : false}
