@@ -208,4 +208,4 @@ var LineConnector = (function(options) {
   return this;
 })();
 
-exports.connector = LineConnector.lineConnector;
+exports.connector = LineConnector;
