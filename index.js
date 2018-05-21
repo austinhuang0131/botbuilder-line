@@ -57,11 +57,9 @@ getAltText = (s) => {return s.substring(0, 400);};
 // options:
 // channelAccessToken / channelSecret: why explain
 // debug: bool, show a bunch of useless console logs
-var LineConnector = (function() {
-  function lineConnector(options) {
-    if (!options.channelAccessToken || !options.channelSecret)
-      throw 'BotBuilder-Line > Options undefined! Define them as the following: {channelAccessToken: "token", channelSecret: "secret"}';
-  }
+var LineConnector = (function(options) {
+  if (!options.channelAccessToken || !options.channelSecret)
+    throw 'BotBuilder-Line > Options undefined! Define them as the following: {channelAccessToken: "token", channelSecret: "secret"}';
   var line = new Line.Client(options);
   lineConnector.prototype.onEvent = (handler) => this.handler = handler;
   lineConnector.prototype.startConversation = () => {if (options.debug) console.log("BotBuilder-Line > startConversation", arguments)};
