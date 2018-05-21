@@ -62,50 +62,46 @@ function LineConnector(options) {
     options = Object.assign({ channelId: channelId }, options);
     if (!options.channelAccessToken || !options.channelSecret)
       throw 'BotBuilder-Line > Options undefined! Define them as the following: {channelAccessToken: "token", channelSecret: "secret"}';
-    var line = new Line.Client(options);
-    this.onEvent = (handler) => this.handler = handler;
-    this.startConversation = () => {if (options.debug) console.log("BotBuilder-Line > startConversation", arguments)};
-    this.onInvoke = () => {if (options.debug) console.log("BotBuilder-Line > onInvoke", arguments)};
-    this.processLineMessage = function(message) {
-      if (message.type === "message") {
-        var msg = {
-            timestamp: message.timestamp,
-            source: "line",
-            replyToken: message.replyToken,
-            entities: [],
-            address: {
-                bot: { name: "placeholder", id: "placeholder" },
-                user: { name: message.replyToken, id: message.source.userId },
-                channelId: "line",
-                channelName: "line",
-                msg: message,
-                conversation: {id: message.source.groupId ? message.source.groupId : "1", isGroup: message.source.type === "group" ? true : false}
-            },
-        };
-        if (message.message.type === "text") msg.text = message.message.text;
-        this.handler([msg]);
-        if (options.debug) console.log("BotBuilder-Line > Message processed", msg);
-      }
-      return this;
-    };
-    this.listen = function(req, res) {
-      res.send("ok");
-      const signature = crypto.createHmac("SHA256", options.channelSecret)
-        .update(JSON.stringify(req.body))
-        .digest("base64");
-      if (options.debug) console.log("BotBuilder-Line > Messages received", req.body);
-      if (signature !== req.get("X-Line-Signature")) {
-        return console.error(
-          "BotBuilder-Line > Request trashed due to signature mismatch. Body: ", req.body
-        );
-      } else {
-        return Promise.all(req.body.events.map(this.processLineMessage));
-      }
-    };
-    Object.assign(line, options);
-    return this;
   }
-
+  var line = new Line.Client(options);
+  lineConnector.prototype.onEvent = (handler) => this.handler = handler;
+  lineConnector.prototype.startConversation = () => {if (options.debug) console.log("BotBuilder-Line > startConversation", arguments)};
+  lineConnector.prototype.onInvoke = () => {if (options.debug) console.log("BotBuilder-Line > onInvoke", arguments)};
+  lineConnector.prototype.processLineMessage = function(message) {
+    if (message.type === "message") {
+      var msg = {
+          timestamp: message.timestamp,
+          source: "line",
+          replyToken: message.replyToken,
+          entities: [],
+          address: {
+              bot: { name: "placeholder", id: "placeholder" },
+              user: { name: message.replyToken, id: message.source.userId },
+              channelId: "line",
+              channelName: "line",
+              msg: message,
+              conversation: {id: message.source.groupId ? message.source.groupId : "1", isGroup: message.source.type === "group" ? true : false}
+          },
+      };
+      if (message.message.type === "text") msg.text = message.message.text;
+      this.handler([msg]);
+      if (options.debug) console.log("BotBuilder-Line > Message processed", msg);
+    }
+  };
+  lineConnector.prototype.listen = function(req, res) {
+    res.send("ok");
+    const signature = crypto.createHmac("SHA256", options.channelSecret)
+      .update(JSON.stringify(req.body))
+      .digest("base64");
+    if (options.debug) console.log("BotBuilder-Line > Messages received", req.body);
+    if (signature !== req.get("X-Line-Signature")) {
+      return console.error(
+        "BotBuilder-Line > Request trashed due to signature mismatch. Body: ", req.body
+      );
+    } else {
+      return Promise.all(req.body.events.map(this.processLineMessage));
+    }
+  };
   lineConnector.prototype.send = function(messages, cb) {
     if (messages.length > 5)
       return Promise.reject(
