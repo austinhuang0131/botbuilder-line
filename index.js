@@ -205,7 +205,7 @@ var LineConnector = (function(options) {
       body
     );
   };
-  return lineConnector;
+  return this;
 })();
 
 exports.connector = LineConnector.lineConnector;
