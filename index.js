@@ -59,7 +59,6 @@ getAltText = (s) => {return s.substring(0, 400);};
 // debug: bool, show a bunch of useless console logs
 function LineConnector(options) {
   function lineConnector(options) {
-    options = Object.assign({ channelId: channelId }, options);
     if (!options.channelAccessToken || !options.channelSecret)
       throw 'BotBuilder-Line > Options undefined! Define them as the following: {channelAccessToken: "token", channelSecret: "secret"}';
   }
