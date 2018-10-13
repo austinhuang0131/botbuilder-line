@@ -161,7 +161,7 @@ function LineConnector(options) {
                 break;
             }
           });
-        } else {
+        } else if (msg.text) {
           body.push({ type: "text", text: msg.text });
         }
       });
